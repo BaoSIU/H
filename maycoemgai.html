@@ -41,9 +41,7 @@
     -webkit-background-clip:text;
     -webkit-text-fill-color:transparent;
   }
-  .balanceWrap {
-    text-align:right;
-  }
+  .balanceWrap {text-align:right;}
   .balanceLabel { font-size:13px; color:var(--muted); }
   .balance { font-weight:800; font-size:20px; }
   main {
@@ -115,7 +113,14 @@
     font-size:14px;
     display:flex;
     justify-content:space-between;
+    align-items:center;
   }
+  .status {
+    font-size:12px;
+    margin-top:4px;
+  }
+  .pending {color:#facc15;}   /* vàng */
+  .approved {color:#22c55e;}  /* xanh lá */
   footer {
     text-align:center;
     padding:10px;
@@ -183,7 +188,7 @@
   </aside>
 </main>
 
-<footer>Robux chính hãng</footer>
+<footer>Robux Chính Hãng</footer>
 
 <script>
 let balance = 18800000;
@@ -235,15 +240,31 @@ document.getElementById('sendBtn').addEventListener('click',()=>{
   if(cost>balance){ alert("Số dư không đủ!"); return;}
   balance -= cost;
   updateBalance();
+
+  // Tạo item lịch sử với trạng thái chờ duyệt
   const item=document.createElement('div');
   item.className='historyItem';
-  item.innerHTML=`<div><strong>${selectedRobux} Robux</strong><div style="font-size:12px;color:#9ca3af">Gửi cho: ${recipient}</div></div><div>${fmt(cost)}</div>`;
+  const id="order-"+Date.now();
+  item.innerHTML=`
+    <div>
+      <strong>${selectedRobux} Robux</strong>
+      <div style="font-size:12px;color:#9ca3af">Gửi cho: ${recipient}</div>
+      <div class="status pending" id="${id}">Đơn chưa được duyệt</div>
+    </div>
+    <div>${fmt(cost)}</div>`;
   historyList.prepend(item);
-  alert(`Bạn đã thanh toán thành công ${selectedRobux} Robux cho ${recipient}`);
+
+  // Sau 5 tiếng tự động duyệt
+  setTimeout(()=>{
+    const st=document.getElementById(id);
+    if(st){ st.textContent="Đơn đã duyệt"; st.classList.remove("pending"); st.classList.add("approved"); }
+  }, 5*60*60*1000); // 5 tiếng
+
+  alert(`Đơn hàng đang chờ duyệt: ${selectedRobux} Robux cho ${recipient}`);
   updateSelection(0);
   document.getElementById('recipientName').value="";
   document.getElementById('customRobux').value="";
 });
 </script>
 </body>
-</html>
+<
