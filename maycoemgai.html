@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SHOPKINGAR1.COM</title>
+<style>
+  :root {
+    --bg1: #0d0c1d;
+    --bg2: #1f1c2c;
+    --card: rgba(255,255,255,0.05);
+    --glass: rgba(255,255,255,0.08);
+    --accent1: #8b5cf6;
+    --accent2: #06b6d4;
+    --text: #f9fafb;
+    --muted: #9ca3af;
+  }
+  * { box-sizing:border-box; }
+  body {
+    margin:0;
+    font-family: 'Segoe UI', Inter, sans-serif;
+    background: linear-gradient(135deg,var(--bg1),var(--bg2));
+    color: var(--text);
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+  }
+  header {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:20px 28px;
+    background:rgba(0,0,0,0.3);
+    backdrop-filter:blur(10px);
+    box-shadow:0 2px 10px rgba(0,0,0,0.5);
+  }
+  .brand {
+    font-size:22px;
+    font-weight:800;
+    background:linear-gradient(90deg,var(--accent1),var(--accent2));
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+  }
+  .balanceWrap {
+    text-align:right;
+  }
+  .balanceLabel { font-size:13px; color:var(--muted); }
+  .balance { font-weight:800; font-size:20px; }
+  main {
+    flex:1;
+    display:grid;
+    grid-template-columns:1fr 380px;
+    gap:24px;
+    padding:30px;
+    max-width:1300px;
+    margin:0 auto;
+  }
+  .panel {
+    background:var(--card);
+    border-radius:16px;
+    padding:20px;
+    box-shadow:0 8px 30px rgba(0,0,0,0.5);
+  }
+  h2,h3 {margin:0 0 12px 0;}
+  .highlight {
+    font-size:20px;
+    font-weight:700;
+    text-align:center;
+    background:linear-gradient(90deg,var(--accent1),var(--accent2));
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    margin-bottom:16px;
+  }
+  .options {display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:12px;}
+  .optBtn {
+    padding:10px 14px;
+    border-radius:10px;
+    border:1px solid var(--glass);
+    background:transparent;
+    color:inherit;
+    cursor:pointer;
+    font-weight:600;
+    transition:0.2s;
+  }
+  .optBtn:hover {background:var(--glass);}
+  .optBtn.active {background:linear-gradient(90deg,var(--accent1),var(--accent2));color:#fff;}
+  .customWrap {display:flex;gap:10px;justify-content:center;margin-bottom:12px;}
+  input[type=number],input[type=text] {
+    padding:10px;
+    border-radius:8px;
+    border:1px solid var(--glass);
+    background:rgba(0,0,0,0.3);
+    color:inherit;
+    font-size:14px;
+    width:200px;
+  }
+  .btn {
+    padding:10px 16px;
+    border:0;
+    border-radius:10px;
+    background:linear-gradient(90deg,var(--accent1),var(--accent2));
+    color:#fff;
+    font-weight:700;
+    cursor:pointer;
+    transition:0.2s;
+  }
+  .btn:hover {opacity:0.9;}
+  .infoRow {text-align:center;margin-bottom:14px;}
+  .rightPanel {display:flex;flex-direction:column;gap:20px;}
+  .historyList {display:flex;flex-direction:column;gap:10px;max-height:400px;overflow:auto;}
+  .historyItem {
+    background:rgba(255,255,255,0.06);
+    padding:10px;
+    border-radius:10px;
+    font-size:14px;
+    display:flex;
+    justify-content:space-between;
+  }
+  footer {
+    text-align:center;
+    padding:10px;
+    font-size:12px;
+    color:var(--muted);
+    background:rgba(0,0,0,0.2);
+  }
+  @media(max-width:960px){
+    main{grid-template-columns:1fr; padding:16px;}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">SHOPKINGAR1.COM</div>
+  <div class="balanceWrap">
+    <div class="balanceLabel">Số dư</div>
+    <div class="balance" id="balanceDisplay">18.800.000 VND</div>
+  </div>
+</header>
+
+<main>
+  <section class="panel">
+    <div class="highlight">Nạp Robux 120h Roblox VNG / Roblox Quốc Tế</div>
+    <p style="text-align:center;color:var(--muted);margin-bottom:20px;">Tỉ lệ: 100 Robux = 20,000 VND</p>
+
+    <div class="options" id="presetOptions">
+      <button class="optBtn" data-value="500">500</button>
+      <button class="optBtn" data-value="1000">1000</button>
+      <button class="optBtn" data-value="1500">1500</button>
+      <button class="optBtn" data-value="2000">2000</button>
+      <button class="optBtn" data-value="2500">2500</button>
+      <button class="optBtn" data-value="3000">3000</button>
+    </div>
+
+    <div class="customWrap">
+      <input id="customRobux" type="number" min="1" placeholder="Nhập số Robux tùy chọn">
+    </div>
+
+    <div class="infoRow">
+      <div>Số Robux đã chọn: <strong id="selectedRobux">0</strong></div>
+      <div>Chi phí: <strong id="costDisplay">0 VND</strong></div>
+    </div>
+
+    <div style="text-align:center;margin-bottom:12px;">
+      <input id="recipientName" type="text" placeholder="Tên người nhận (player)">
+    </div>
+
+    <div style="display:flex;justify-content:center;gap:10px;">
+      <button class="btn" id="previewBtn">Xem chi phí</button>
+      <button class="btn" id="sendBtn">Gửi Robux</button>
+    </div>
+  </section>
+
+  <aside class="rightPanel">
+    <div class="panel">
+      <h3>Tóm tắt</h3>
+      <div>Robux: <strong id="sideRobux">0</strong></div>
+      <div>Chi phí: <strong id="sideCost">0 VND</strong></div>
+    </div>
+    <div class="panel">
+      <h3>Lịch sử giao dịch</h3>
+      <div class="historyList" id="historyList"></div>
+    </div>
+  </aside>
+</main>
+
+<footer>Robux chính hãng</footer>
+
+<script>
+let balance = 18800000;
+const rate = 200; // 1 Robux = 200 VND
+let selectedRobux = 0;
+
+const balanceDisplay = document.getElementById('balanceDisplay');
+const selectedRobuxEl = document.getElementById('selectedRobux');
+const costDisplay = document.getElementById('costDisplay');
+const sideRobux = document.getElementById('sideRobux');
+const sideCost = document.getElementById('sideCost');
+const historyList = document.getElementById('historyList');
+
+function fmt(n){return n.toLocaleString('vi-VN')+" VND";}
+function updateBalance(){ balanceDisplay.textContent = balance.toLocaleString('vi-VN')+" VND"; }
+function updateSelection(r){
+  selectedRobux = r||0;
+  const cost = selectedRobux*rate;
+  selectedRobuxEl.textContent = selectedRobux;
+  costDisplay.textContent = fmt(cost);
+  sideRobux.textContent = selectedRobux;
+  sideCost.textContent = fmt(cost);
+}
+updateBalance(); updateSelection(0);
+
+document.querySelectorAll('.optBtn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.optBtn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('customRobux').value="";
+    updateSelection(Number(btn.dataset.value));
+  });
+});
+
+document.getElementById('customRobux').addEventListener('input', e=>{
+  document.querySelectorAll('.optBtn').forEach(b=>b.classList.remove('active'));
+  updateSelection(Number(e.target.value));
+});
+
+document.getElementById('previewBtn').addEventListener('click',()=>{
+  alert("Chi phí: "+fmt(selectedRobux*rate));
+});
+
+document.getElementById('sendBtn').addEventListener('click',()=>{
+  const recipient = document.getElementById('recipientName').value.trim();
+  if(!recipient){ alert("Vui lòng nhập tên người nhận"); return;}
+  if(selectedRobux<=0){ alert("Vui lòng chọn số Robux"); return;}
+  const cost = selectedRobux*rate;
+  if(cost>balance){ alert("Số dư không đủ!"); return;}
+  balance -= cost;
+  updateBalance();
+  const item=document.createElement('div');
+  item.className='historyItem';
+  item.innerHTML=`<div><strong>${selectedRobux} Robux</strong><div style="font-size:12px;color:#9ca3af">Gửi cho: ${recipient}</div></div><div>${fmt(cost)}</div>`;
+  historyList.prepend(item);
+  alert(`Bạn đã thanh toán thành công ${selectedRobux} Robux cho ${recipient}`);
+  updateSelection(0);
+  document.getElementById('recipientName').value="";
+  document.getElementById('customRobux').value="";
+});
+</script>
+</body>
+</html>
